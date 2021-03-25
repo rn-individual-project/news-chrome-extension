@@ -11,7 +11,8 @@ $(function(){
                     function (response) {
                         result = response.farewell;
                         console.log(result.score);
-                        document.getElementById('output').innerText = result.score
+                        displayText = (result.score > 0) ? ("This article is biased. Score: " + result.score) : ("This article is unbiased. Score: " + result.score)
+                        document.getElementById('output').innerText = displayText
                     });
             }
 
