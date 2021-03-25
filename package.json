@@ -1,0 +1,19 @@
+{
+  "name": "IndividualProject",
+  "version": "1.0.0",
+  "scripts": {
+    "copy": "cp src/popup.js dist/src/ && cp src/popup.html dist/src/ && cp src/jquery-3.5.1.min.js dist/src",
+    "build": "parcel build src/background.js --dist-dir dist/src/ --no-optimize && npm run copy"
+  },
+  "license": "Apache 2.0",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "clang-format": "^1.2.3"
+  },
+  "dependencies": {
+    "parcel": "^2.0.0-beta.2"
+  }
+}
