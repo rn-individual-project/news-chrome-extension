@@ -1,20 +1,7 @@
-var serverhost = 'http://297ab559-9a59-4b4a-b408-049c5805e6af.uksouth.azurecontainer.io/score';
+var serverhost = 'http://localhost:45519/score';
 //127.0.0.1:8080
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        /*
-        var url = serverhost + '/biasdet/get_prediction/?url='+ encodeURIComponent(request.article_url) ;
-
-        console.log(url);
-
-        fetch(url)
-            .then(response => response.json())
-            .then(response => sendResponse({farewell: response}))
-            .catch(error => console.log(error))
-
-        return true;  // Will respond asynchronously.
-
-        */
 
         fetch(serverhost, {
             method: 'post',

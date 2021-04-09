@@ -1,8 +1,8 @@
 {
-  "name": "Bias Detector",
+  "name": "Fake News Detector",
   "version": "1.0",
   "description": "Chrome extension to detect political bias.",
-  "permissions": ["activeTab" ,"declarativeContent" ,"storage", "contextMenus", "http://297ab559-9a59-4b4a-b408-049c5805e6af.uksouth.azurecontainer.io/score", "tabs", "background", "notifications"],
+  "permissions": ["activeTab" ,"declarativeContent" ,"storage", "contextMenus", "http://localhost:45519/score", "tabs", "background", "notifications"],
   "background": {
     "scripts": ["src/background.js"],
     "persistent": false
@@ -14,6 +14,10 @@
   "web_accessible_resources": [
     "src/model/*"
   ],
+  "content_scripts": [{
+    "js": ["src/content.js"],
+    "matches": ["<all_urls>"]
+  }],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "manifest_version": 2
 }

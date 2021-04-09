@@ -2,7 +2,7 @@
   "name": "IndividualProject",
   "version": "1.0.0",
   "scripts": {
-    "copy": "cp src/popup.js dist/src/ && cp src/popup.html dist/src/ && cp src/jquery-3.5.1.min.js dist/src",
+    "copy": "cp src/popup.js dist/src/ && cp src/popup.html dist/src/ && cp src/content.js dist/src/ && cp src/jquery-3.5.1.min.js dist/src",
     "build": "parcel build src/background.js --dist-dir dist/src/ --no-optimize && npm run copy"
   },
   "license": "Apache 2.0",
