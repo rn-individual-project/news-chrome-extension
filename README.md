@@ -1,6 +1,6 @@
 # News Chrome Extension Feedback!
 
-Hi! If you're here, this means I have asked you to give me some feedback on my fake news/bias detecting chrome extension.
+Hi! If you're here, this means I've probably asked you to give me some feedback on my fake news/bias detecting chrome extension. Feedback form: https://forms.gle/YRaaoC5RqeZa88V9A
 
 ## Instructions
 
