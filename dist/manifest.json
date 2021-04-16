@@ -2,7 +2,7 @@
   "name": "Fake News Detector",
   "version": "1.0",
   "description": "Chrome extension to detect political bias.",
-  "permissions": ["activeTab" ,"declarativeContent" ,"storage", "contextMenus", "http://localhost:45519/score", "tabs", "background", "notifications"],
+  "permissions": ["activeTab" ,"declarativeContent" ,"storage", "contextMenus", "http://ff12df23-38aa-4eea-86f1-11896fecbc85.uksouth.azurecontainer.io/score", "tabs", "background", "notifications"],
   "background": {
     "scripts": ["src/background.js"],
     "persistent": false
