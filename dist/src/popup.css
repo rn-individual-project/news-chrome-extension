@@ -1,0 +1,23 @@
+body {
+    min-width:500px;
+}
+
+.output {
+    color:blue;
+    font-size:18px;
+}
+
+.evidence {
+    color:forestgreen;
+    font-size:15px;
+}
+
+.name {
+    color:darkgreen;
+    font-size:17px;
+}
+
+.source {
+    color:dimgrey;
+    font-size:13px;
+}

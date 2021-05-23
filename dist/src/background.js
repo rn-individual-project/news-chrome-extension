@@ -1,18 +1,37 @@
 (function () {
-  var $e39320be2fcaa38be67f2bda499e9371$var$serverhost = 'http://ff12df23-38aa-4eea-86f1-11896fecbc85.uksouth.azurecontainer.io/score';
+  var $e39320be2fcaa38be67f2bda499e9371$var$serverhost = 'http://127.0.0.1:8000';
   // 127.0.0.1:8080
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    fetch($e39320be2fcaa38be67f2bda499e9371$var$serverhost, {
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === name + '=') {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    var url = $e39320be2fcaa38be67f2bda499e9371$var$serverhost + '/biasdet/get_prediction/';
+    fetch(url, {
       method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        url: request.article_url
+        'article': request.article,
+        'url': request.url,
+        'csrfmiddlewaretoken': csrftoken
       })
     }).then(response => response.json()).then(response => sendResponse({
-      farewell: response
+      result: response
     })).catch(error => console.log(error));
     return true;
   });
