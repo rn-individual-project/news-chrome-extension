@@ -1,10 +1,10 @@
-# News Chrome Extension Feedback!
+# Fake News Detector
 
-Hi! If you're here, this means I've probably asked you to give me some feedback on my fake news/bias detecting chrome extension. Feedback form: https://forms.gle/YRaaoC5RqeZa88V9A
+Fake News Detector is a chrome extension that helps you identify fake news articles when you browse news websites.
 
-## Instructions
+## Download Instructions
 
-Below are instructions to run the extension.
+Below are instructions to download and run the extension.
 
 1. Clone this repository using `git clone https://github.com/rn-individual-project/news-chrome-extension.git` in the terminal.
 2. In your chrome browser, go to `chrome://extensions` and toggle the "Developer mode" in the top-right corner.
@@ -13,4 +13,4 @@ Below are instructions to run the extension.
 
 ## How to use the extension
 
-Navigate to a news website in your browser and click on the extension. You may need to wait a moment, and it will give you a prediction of the level of bias or misinformation!
+Navigate to a news website in your browser, click on the extension and it will give you a prediction of the level of misinformation!
