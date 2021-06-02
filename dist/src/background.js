@@ -1,6 +1,5 @@
 (function () {
-  var $e39320be2fcaa38be67f2bda499e9371$var$serverhost = 'http://127.0.0.1:8000';
-  // 127.0.0.1:8080
+  var $e39320be2fcaa38be67f2bda499e9371$var$serverhost = 'https://fake-news-detector.azurewebsites.net/';
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     function getCookie(name) {
       var cookieValue = null;

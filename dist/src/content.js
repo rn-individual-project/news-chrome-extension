@@ -52,18 +52,20 @@ chrome.runtime.onMessage.addListener(
             console.log(sentences)
             headline = request.headline
 
-            h1 = document.body.getElementsByTagName("h1")[0]
-            h1.innerHTML = h1.innerText.replace(headline, `<mark>$&</mark>`)
+            //h1 = document.body.getElementsByTagName("h1")[0]
+            //h1.innerHTML = h1.innerText.replace(headline, `<mark>$&</mark>`)
 
             paras = document.body.getElementsByTagName("p")
             console.log(paras.length)
             let j;
             let i;
             for (i = 0; i < paras.length; i++) {
+                paras[i].innerHTML = paras[i].innerHTML.replace("&nbsp;", " ")
                 for (j = 0; j < sentences.length; j++) {
                     console.log(paras[i].innerText)
                     console.log(sentences[j])
-                    paras[i].innerHTML = paras[i].innerText.replace(sentences[j], `<mark>$&</mark>`)
+                    paras[i].innerHTML = paras[i].innerText.replace(sentences[j],
+                        `<div class="tooltip" ><span class="highlight">$&</span><span class="tooltiptext">This text has been highlighted because it contains language that indicates bias or misinformation.</span>`)
                 }
             }
         }

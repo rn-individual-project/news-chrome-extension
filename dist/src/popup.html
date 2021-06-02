@@ -8,31 +8,46 @@
 </head>
 <body>
 <h1>Fake News Detector</h1>
-<div><p id="output" class="output" ></p></div>
 <div>
-    <p id="name0" class="name" ></p>
-    <!--p id="source0" class="source" ></p-->
-    <p id="evidence0" class="evidence" ></p>
+    <p id="loading" class="loading" >Loading...</p>
+    <div>
+        <img id="image" src="../img/reliable.jpg" class="image" width="100" height="100">
+    </div>
+    <p id="output" class="output" ></p>
+    <label id="meter-label" for="meter"></label>
+    <meter id="meter" class="meter" max=1.0 min=0.0 value=0.5 high=.7 low=.5 optimum=0.0></meter>
 </div>
 <div>
-    <p id="name1" class="name" ></p>
-    <!--p id="source1" class="source" ></p-->
-    <p id="evidence1" class="evidence" ></p>
+    <label for="evidence-button" id="explanation" class="explanation" >We also used relevant articles as evidence to calculate the score.</label>
+    <button id="evidence-button" type="button" >View Evidence</button>
 </div>
-<div>
-    <p id="name2" class="name" ></p>
-    <!--p id="source2" class="source" ></p-->
-    <p id="evidence2" class="evidence" ></p>
-</div>
-<div>
-    <p id="name3" class="name" ></p>
-    <!--p id="source3" class="source" ></p-->
-    <p id="evidence3" class="evidence" ></p>
-</div>
-<div>
-    <p id="name4" class="name" ></p>
-    <!--p id="source4" class="source" ></p-->
-    <p id="evidence4" class="evidence" ></p>
+<div id="evidences" class="evidences" >
+
+    <div>
+        <p id="source0" class="source" ></p>
+        <p id="name0" class="name" ></p>
+        <p id="evidence0" class="evidence" ></p>
+    </div>
+    <div>
+        <p id="source1" class="source" ></p>
+        <p id="name1" class="name" ></p>
+        <p id="evidence1" class="evidence" ></p>
+    </div>
+    <div>
+        <p id="source2" class="source" ></p>
+        <p id="name2" class="name" ></p>
+        <p id="evidence2" class="evidence" ></p>
+    </div>
+    <div>
+        <p id="source3" class="source" ></p>
+        <p id="name3" class="name" ></p>
+        <p id="evidence3" class="evidence" ></p>
+    </div>
+    <div>
+        <p id="source4" class="source" ></p>
+        <p id="name4" class="name" ></p>
+        <p id="evidence4" class="evidence" ></p>
+    </div>
 </div>
 </body>
 </html>
