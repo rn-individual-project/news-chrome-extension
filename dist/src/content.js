@@ -60,7 +60,7 @@ chrome.runtime.onMessage.addListener(
             let j;
             let i;
             for (i = 0; i < paras.length; i++) {
-                paras[i].innerHTML = paras[i].innerHTML.replace("&nbsp;", " ")
+                paras[i].innerHTML = paras[i].innerHTML.replace(/&nbsp;/g, " ")
                 for (j = 0; j < sentences.length; j++) {
                     console.log(paras[i].innerText)
                     console.log(sentences[j])

@@ -17,13 +17,29 @@ label {
     display: none;
 }
 
+.loader {
+    margin-left: auto;
+    margin-right: auto;
+    border: 16px solid dimgrey;
+    border-top: 16px solid lightskyblue;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .loading {
     text-align: center;
     color: dimgrey;
     font-size: 15px;
 }
 
-.image {
+.center {
     display: none;
     margin-left: auto;
     margin-right: auto;

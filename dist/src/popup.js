@@ -1,23 +1,20 @@
 const text = [
     "Loading...",
     "The server is a lemon and two electrodes. Please wait...",
-    "Is this Windows?",
     "Summoning more fact-checking elves...",
     "*elevator music*",
     "I swear it's almost done!",
     "Optimizing the optimizer...",
     "Fact-checking the facts...",
     "Patience! Detecting fake news is not easy, you know...",
-    "Discovering witty loading messages...",
     "Do you smell something burning?",
-    "Hacking into the mainframe...",
-    "\"Don't believe everything you read on the internet\" - William Shakespeare",
-    "\"If it's online then it must be true!\" - Genghis Khan",
-    "Bob, our fake news detector is on holiday today...",
     "Initializing the initializers...",
     "Updating the updaters...",
     "What is truth really, anyway?",
-    "Electrocuting the neural networks..."
+    "Electrocuting the neural networks...",
+    "Crunching the numbers...",
+    "The AI is becoming sentient...",
+    "The elves are overheating..."
 ];
 
 window.onload = function () {
@@ -42,6 +39,7 @@ window.onload = function () {
             console.log(url)
             chrome.runtime.sendMessage({article: response.innerText, url: url}, function (response) {
                 document.getElementById('loading').style.display = 'none'
+                document.getElementById('load-spinner').style.display = 'none'
                 document.getElementById('evidence-button').style.display = 'inline-block'
                 document.getElementById('explanation').style.display = 'block'
                 let result = response.result
@@ -112,6 +110,7 @@ window.onload = function () {
                 }
                 document.getElementById('image').style.display = 'block'
                 document.getElementById('image').src = image_src
+                score = Math.round(score * 100) / 100
                 document.getElementById('meter-label').innerText = "Score: " + score
                 document.getElementById('meter').value = score
                 document.getElementById('meter').style.display = 'block'
