@@ -72,7 +72,7 @@ window.onload = function () {
                     console.log(searchResults)
 
                     if (score < 0.5) {
-                        displayText = "This page is reliable and unbiased"
+                        displayText = "I think this page is reliable and unbiased"
                         color = "green"
                         image_src = "../img/reliable.jpg"
                     } else {
@@ -98,11 +98,11 @@ window.onload = function () {
                             });
                         });
                         if (score < 0.7) {
-                            displayText = "The language in this article indicates that there may be some misinformation or bias. "
+                            displayText = "The language in this article makes me think that there may be some misinformation or bias. "
                             color = "orange"
                             image_src = "../img/warning.jpg"
                         } else {
-                            displayText = "The language in this article indicates that there is a high level of misinformation or bias."
+                            displayText = "The language in this article makes me think that there is a high level of misinformation or bias."
                             color = "red"
                             image_src = "../img/fake.jpg"
                         }
