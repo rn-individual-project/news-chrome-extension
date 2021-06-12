@@ -17,11 +17,14 @@
         <img id="image" src="../img/reliable.jpg" class="center" width="100" height="100">
     </div>
     <p id="output" class="output" ></p>
-    <label id="meter-label" for="meter"></label>
-    <meter id="meter" class="meter" max=1.0 min=0.0 value=0.5 high=.7 low=.5 optimum=0.0></meter>
+    <div class="tooltip">
+        <span class="tooltiptext">The Fake News Score tells you how likely the article is to be fake news</span>
+        <label id="meter-label" for="meter"></label>
+    </div>
+    <meter id="meter" class="meter" max=1.0 min=0.0 value=0.5 high=0.7 low=0.4 optimum=0.0></meter>
 </div>
 <div>
-    <label for="evidence-button" id="explanation" class="explanation" >I also used relevant articles as evidence to calculate the score. You can take a look if you want!</label>
+    <label for="evidence-button" id="explanation" class="explanation" >I also used other sources on the web to verify this article. You can take a look if you want!</label>
     <button id="evidence-button" type="button" >View Evidence</button>
 </div>
 <div id="evidences" class="evidences" >

@@ -52,7 +52,7 @@ window.onload = function () {
                     displayText = "Sorry! Article could not be parsed :("
                     color = "grey"
                 } else {
-                    score = score*0.7 + (1 - claim_veracity)*0.3
+                    score = score*0.6 + claim_veracity*0.4
                     console.log(score)
 
                     let searchResults = result.search_results
@@ -71,7 +71,7 @@ window.onload = function () {
                     }
                     console.log(searchResults)
 
-                    if (score < 0.5) {
+                    if (score < 0.4) {
                         displayText = "I think this page is reliable and unbiased"
                         color = "green"
                         image_src = "../img/reliable.jpg"
@@ -111,7 +111,7 @@ window.onload = function () {
                 document.getElementById('image').style.display = 'block'
                 document.getElementById('image').src = image_src
                 score = Math.round(score * 100) / 100
-                document.getElementById('meter-label').innerText = "Score: " + score
+                document.getElementById('meter-label').innerText = "Fake News Score: " + score
                 document.getElementById('meter').value = score
                 document.getElementById('meter').style.display = 'block'
                 document.getElementById('output').innerText = displayText
