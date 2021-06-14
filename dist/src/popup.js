@@ -19,6 +19,24 @@ const text = [
 
 window.onload = function () {
 
+    function isException(result) {
+        let message
+        if (result.hasOwnProperty('exception')) {
+            if (result.type === "LanguageException" || result.type === "NoTextException") {
+                message = result.exception
+            } else if (result.type === "ArticleException") {
+                message = "Sorry! Article could not be parsed :("
+            } else {
+                message = "Something went wrong :(\nWe're working on fixing this."
+            }
+            document.getElementById('output').innerText = message
+            document.getElementById('output').style.color = "grey"
+            return true
+        }
+        return false
+    }
+
+    /* Loading */
     setInterval(changeText, 3000)
     function changeText() {
         document.getElementById('loading').innerText = text[Math.floor(Math.random() * text.length)];
@@ -40,72 +58,67 @@ window.onload = function () {
             chrome.runtime.sendMessage({article: response.innerText, url: url}, function (response) {
                 document.getElementById('loading').style.display = 'none'
                 document.getElementById('load-spinner').style.display = 'none'
-                document.getElementById('evidence-button').style.display = 'inline-block'
-                document.getElementById('explanation').style.display = 'block'
                 let result = response.result
-                let claim_veracity = JSON.parse(response.result.claim_veracity)
-                let score = JSON.parse(result.score)
+
+                if (isException(result)) return
+
                 let displayText
                 let color
+                let claim_veracity = JSON.parse(result.claim_veracity)
+                let score = JSON.parse(result.score)
                 let image_src
-                if (score === "") {
-                    displayText = "Sorry! Article could not be parsed :("
-                    color = "grey"
+
+                score = score*0.6 + claim_veracity*0.4
+                console.log(score)
+
+                let searchResults = result.search_results
+                for (let i = 0; i < Math.min(5, searchResults.length); i++) {
+                    a = searchResults[i]
+                    console.log(a)
+                    let link = document.createElement('a');
+                    link.target = '_newtab'
+                    link.href = a.url
+                    link.innerHTML = a.name
+                    document.getElementById('name' + i).appendChild(link)
+                    document.getElementById('evidence' + i).innerHTML = a.snippet
+                    document.getElementById('source' + i).innerHTML = a.displayUrl
+                }
+                console.log(searchResults)
+
+                if (score < 0.4) {
+                    displayText = "I think this page is reliable and unbiased"
+                    color = "green"
+                    image_src = "../img/reliable.jpg"
                 } else {
-                    score = score*0.6 + claim_veracity*0.4
-                    console.log(score)
+                    sa = result.sa.replaceAll("\n", ",")
+                    sa = sa.replace(/\s+/g, '')
+                    sa = sa.replaceAll("0.]", "0.0]")
+                    sa = JSON.parse(sa).flat();
+                    console.log(sa)
+                    ha = result.ha.replaceAll("\n", ",")
+                    ha = ha.replace(/\s+/g, '')
+                    ha = ha.replaceAll("0.]", "0.0]")
+                    ha = JSON.parse(ha).flat();
+                    headlineWords = result.headline.split(' ')
+                    ha = ha.slice(0, headlineWords.length)
+                    console.log(ha)
+                    maxSent = result.sentences[sa.indexOf(Math.max(...sa))]
+                    console.log(maxSent)
+                    maxHeadline = headlineWords[ha.indexOf(Math.max(...ha))]
 
-                    let searchResults = result.search_results
-                    for (let i = 0; i < Math.min(5, searchResults.length); i++) {
-                        a = searchResults[i]
-                        console.log(a)
-                        let link = document.createElement('a');
-                        link.target = '_newtab'
-                        link.href = a.url
-                        link.innerHTML = a.name
-                        document.getElementById('name' + i).appendChild(link)
-                        document.getElementById('evidence' + i).innerHTML = a.snippet
-                        document.getElementById('source' + i).innerHTML = a.displayUrl
-                        //document.getElementById('source' + i).innerText = a.
-                        //document.getElementById('name' + i).innerHTML = a.name
-                    }
-                    console.log(searchResults)
-
-                    if (score < 0.4) {
-                        displayText = "I think this page is reliable and unbiased"
-                        color = "green"
-                        image_src = "../img/reliable.jpg"
-                    } else {
-                        sa = result.sa.replaceAll("\n", ",")
-                        sa = sa.replace(/\s+/g, '')
-                        sa = sa.replaceAll("0.]", "0.0]")
-                        sa = JSON.parse(sa).flat();
-                        console.log(sa)
-                        ha = result.ha.replaceAll("\n", ",")
-                        ha = ha.replace(/\s+/g, '')
-                        ha = ha.replaceAll("0.]", "0.0]")
-                        ha = JSON.parse(ha).flat();
-                        headlineWords = result.headline.split(' ')
-                        ha = ha.slice(0, headlineWords.length)
-                        console.log(ha)
-                        maxSent = result.sentences[sa.indexOf(Math.max(...sa))]
-                        console.log(maxSent)
-                        maxHeadline = headlineWords[ha.indexOf(Math.max(...ha))]
-
-                        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-                            chrome.tabs.sendMessage(tabs[0].id, {sentence: maxSent, headline: maxHeadline}, function (response) {
-                                //console.log(response.farewell);
-                            });
+                    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+                        chrome.tabs.sendMessage(tabs[0].id, {sentence: maxSent, headline: maxHeadline}, function (response) {
+                            //console.log(response.farewell);
                         });
-                        if (score < 0.7) {
-                            displayText = "The language in this article makes me think that there may be some misinformation or bias. "
-                            color = "orange"
-                            image_src = "../img/warning.jpg"
-                        } else {
-                            displayText = "The language in this article makes me think that there is a high level of misinformation or bias."
-                            color = "red"
-                            image_src = "../img/fake.jpg"
-                        }
+                    });
+                    if (score < 0.7) {
+                        displayText = "The language in this article makes me think that there may be some misinformation or bias. "
+                        color = "orange"
+                        image_src = "../img/warning.jpg"
+                    } else {
+                        displayText = "The language in this article makes me think that there is a high level of misinformation or bias."
+                        color = "red"
+                        image_src = "../img/fake.jpg"
                     }
                 }
                 document.getElementById('image').style.display = 'block'
@@ -116,6 +129,8 @@ window.onload = function () {
                 document.getElementById('meter').style.display = 'block'
                 document.getElementById('output').innerText = displayText
                 document.getElementById('output').style.color = color
+                document.getElementById('evidence-button').style.display = 'inline-block'
+                document.getElementById('explanation').style.display = 'block'
             })
         })
     })
