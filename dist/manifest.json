@@ -1,11 +1,11 @@
 {
   "name": "Verita",
-  "version": "3.0",
+  "version": "3.1",
   "icons": {
-    "16": "img/icon16.png",
-    "32": "img/icon32.png",
-    "48": "img/icon48.png",
-    "128": "img/icon128.png"
+    "16": "img/v16.png",
+    "32": "img/v32.png",
+    "48": "img/v48.png",
+    "128": "img/v128.png"
   },
   "description": "Chrome extension to detect political bias.",
   "permissions": ["activeTab" ,"declarativeContent" ,"storage", "contextMenus", "https://fake-news-detector.azurewebsites.net/", "tabs", "background", "notifications"],

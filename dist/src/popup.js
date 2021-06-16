@@ -45,8 +45,8 @@ window.onload = function () {
     function showEvidence() {
         let evidences = document.getElementById('evidences')
         evidences.style.display = (evidences.style.display) === 'block' ? 'none' : 'block'
-        let buttonText = document.getElementById('evidence-button').innerText
-        document.getElementById('evidence-button').innerText = (buttonText === "View Evidence") ? "Hide Evidence" : "View Evidence"
+        let buttonText = document.getElementById('evidence-button').innerHTML
+        document.getElementById('evidence-button').innerHTML = (buttonText === "View Evidence") ? "Hide Evidence" : "View Evidence"
     }
     document.getElementById('evidence-button').addEventListener("click", showEvidence)
 
@@ -123,8 +123,8 @@ window.onload = function () {
                 }
                 document.getElementById('image').style.display = 'block'
                 document.getElementById('image').src = image_src
-                score = Math.round(score * 100) / 100
-                document.getElementById('meter-label').innerText = "Fake News Score: " + score
+                score = (Math.round(score * 100) / 100).toFixed(2)
+                document.getElementById('meter-label').innerHTML = "<b>Fake News Score: " + score + "</b>"
                 document.getElementById('meter').value = score
                 document.getElementById('meter').style.display = 'block'
                 document.getElementById('output').innerText = displayText
