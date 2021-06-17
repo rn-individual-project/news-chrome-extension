@@ -1,10 +1,7 @@
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.url) {
-            //console.log(document.body.innerText)
-            //console.log("chrome extension running");
-            //sentences = request.sentence.split(/\r?\n/).filter(Boolean)
-            //let paras = document.body.getElementsByTagName("p")
+            // Parse article if BBC
             const url = new URL(request.url)
             let text = ""
             console.log(url.hostname)
@@ -31,29 +28,11 @@ chrome.runtime.onMessage.addListener(
             }
             sendResponse({innerText: text})
         }
-            //console.log(paras)
-/*
-            for (let i = 0; i < paras.length; i++) {
-                text += paras[i].innerText
-                if (!paras[i].innerText.endsWith(".")) {
-                    text += ". "
-                } else {
-                    text += " "
-                }
-            }
-            console.log(text)
-            sendResponse({innerText: text});
-        }
-*/
-        if (request.sentence) {
-            console.log("chrome extension running");
 
+        if (request.sentence) {
+            // Highlight sentence with most attention
             sentences = request.sentence.split(/\r?\n/).filter(Boolean)
             console.log(sentences)
-            headline = request.headline
-
-            //h1 = document.body.getElementsByTagName("h1")[0]
-            //h1.innerHTML = h1.innerText.replace(headline, `<mark>$&</mark>`)
 
             paras = document.body.getElementsByTagName("p")
             console.log(paras.length)

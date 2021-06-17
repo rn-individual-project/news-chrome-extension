@@ -2,12 +2,27 @@
 
 body {
     min-width:400px;
+    padding: 5px 20px;
 }
 
 button {
-    display: none;
-    margin-bottom: 10px;
-    margin-top: 20px;
+    visibility: hidden;
+    display: block;
+    margin: 0 auto 5px;
+    border-radius: 15px;
+    border: none;
+    background-color: lightgray;
+    color: black;
+    padding: 5px 10px;
+    text-align: center;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+button:hover {
+    background-color: dimgrey;
+    color: white;
 }
 
 label {
@@ -39,6 +54,7 @@ label {
     text-align: center;
     color: dimgrey;
     font-size: 15px;
+    margin-bottom: -50px;
 }
 
 .badge {
@@ -51,6 +67,7 @@ label {
     width: 500px;
     height: 40px;
     display: none;
+    color: lightgray;
 }
 
 h1 {

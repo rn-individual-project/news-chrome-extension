@@ -1,4 +1,5 @@
-const text = [
+/* Some funny loading messages inspired by https://gist.github.com/meain/6440b706a97d2dd71574769517e7ed32 */
+const loading_messages = [
     "Loading...",
     "The server is a lemon and two electrodes. Please wait...",
     "Summoning more fact-checking elves...",
@@ -19,120 +20,119 @@ const text = [
 
 window.onload = function () {
 
-    function isException(result) {
-        let message
-        if (result.hasOwnProperty('exception')) {
-            if (result.type === "LanguageException" || result.type === "NoTextException") {
-                message = result.exception
-            } else if (result.type === "ArticleException") {
-                message = "Sorry! Article could not be parsed :("
-            } else {
-                message = "Something went wrong :(\nWe're working on fixing this."
-            }
-            document.getElementById('output').innerText = message
-            document.getElementById('output').style.color = "grey"
-            return true
-        }
-        return false
-    }
-
-    /* Loading */
-    setInterval(changeText, 3000)
-    function changeText() {
-        document.getElementById('loading').innerText = text[Math.floor(Math.random() * text.length)];
-    }
-
-    function showEvidence() {
-        let evidences = document.getElementById('evidences')
-        evidences.style.display = (evidences.style.display) === 'block' ? 'none' : 'block'
-        let buttonText = document.getElementById('evidence-button').innerHTML
-        document.getElementById('evidence-button').innerHTML = (buttonText === "View Evidence") ? "Hide Evidence" : "View Evidence"
-    }
-    document.getElementById('evidence-button').addEventListener("click", showEvidence)
-
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        let url = tabs[0].url
+        let url = tabs[0].url;
         chrome.tabs.sendMessage(tabs[0].id, {url: url}, function(response) {
-            console.log(response.innerText)
-            console.log(url)
+            console.log(response.innerText);
+            console.log(url);
             chrome.runtime.sendMessage({article: response.innerText, url: url}, function (response) {
-                document.getElementById('loading').style.display = 'none'
-                document.getElementById('load-spinner').style.display = 'none'
-                let result = response.result
+                let result = response.result;
 
-                if (isException(result)) return
-
-                let displayText
-                let color
-                let claim_veracity = JSON.parse(result.claim_veracity)
-                let score = JSON.parse(result.score)
-                let image_src
-
-                score = score*0.6 + claim_veracity*0.4
-                console.log(score)
-
-                let searchResults = result.search_results
-                for (let i = 0; i < Math.min(5, searchResults.length); i++) {
-                    a = searchResults[i]
-                    console.log(a)
-                    let link = document.createElement('a');
-                    link.target = '_newtab'
-                    link.href = a.url
-                    link.innerHTML = a.name
-                    document.getElementById('name' + i).appendChild(link)
-                    document.getElementById('evidence' + i).innerHTML = a.snippet
-                    document.getElementById('source' + i).innerHTML = a.displayUrl
+                if (isException(result)) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('load-spinner').style.display = 'none';
+                    return;
                 }
-                console.log(searchResults)
 
-                if (score < 0.4) {
-                    displayText = "I think this page is reliable and unbiased"
-                    color = "green"
-                    image_src = "../img/reliable.jpg"
-                } else {
-                    sa = result.sa.replaceAll("\n", ",")
-                    sa = sa.replace(/\s+/g, '')
-                    sa = sa.replaceAll("0.]", "0.0]")
-                    sa = JSON.parse(sa).flat();
-                    console.log(sa)
-                    ha = result.ha.replaceAll("\n", ",")
-                    ha = ha.replace(/\s+/g, '')
-                    ha = ha.replaceAll("0.]", "0.0]")
-                    ha = JSON.parse(ha).flat();
-                    headlineWords = result.headline.split(' ')
-                    ha = ha.slice(0, headlineWords.length)
-                    console.log(ha)
-                    maxSent = result.sentences[sa.indexOf(Math.max(...sa))]
-                    console.log(maxSent)
-                    maxHeadline = headlineWords[ha.indexOf(Math.max(...ha))]
+                let claim_veracity = JSON.parse(result.claim_veracity);
+                let score = JSON.parse(result.score);
 
+                score = score*0.6 + claim_veracity*0.4;
+                console.log(score);
+
+                displayElements(score);
+                displaySearchResults(result.search_results)
+
+                if (score > 0.4) {
+                    // Send sentence with max attention for content script for highlighting
+                    maxSent = getMaxAttention(result.sentences, result.sa);
                     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-                        chrome.tabs.sendMessage(tabs[0].id, {sentence: maxSent, headline: maxHeadline}, function (response) {
-                            //console.log(response.farewell);
+                        chrome.tabs.sendMessage(tabs[0].id, {sentence: maxSent}, function (response) {
                         });
                     });
-                    if (score < 0.7) {
-                        displayText = "The language in this article makes me think that there may be some misinformation or bias. "
-                        color = "orange"
-                        image_src = "../img/warning.jpg"
-                    } else {
-                        displayText = "The language in this article makes me think that there is a high level of misinformation or bias."
-                        color = "red"
-                        image_src = "../img/fake.jpg"
-                    }
                 }
-                document.getElementById('image').style.display = 'block'
-                document.getElementById('image').src = image_src
-                score = (Math.round(score * 100) / 100).toFixed(2)
-                document.getElementById('meter-label').innerHTML = "<b>Fake News Score: " + score + "</b>"
-                document.getElementById('meter').value = score
-                document.getElementById('meter').style.display = 'block'
-                document.getElementById('output').innerText = displayText
-                document.getElementById('output').style.color = color
-                document.getElementById('evidence-button').style.display = 'inline-block'
-                document.getElementById('explanation').style.display = 'block'
             })
         })
     })
 
+    function displaySearchResults(searchResults) {
+        for (let i = 0; i < Math.min(5, searchResults.length); i++) {
+            a = searchResults[i];
+            console.log(a);
+            let link = document.createElement('a');
+            link.target = '_newtab';
+            link.href = a.url;
+            link.innerHTML = a.name;
+            document.getElementById('name' + i).appendChild(link);
+            document.getElementById('evidence' + i).innerHTML = a.snippet;
+            document.getElementById('source' + i).innerHTML = a.displayUrl;
+        }
+        console.log(searchResults);
+    }
+
+    function isException(result) {
+        let message;
+        if (result.hasOwnProperty('exception')) {
+            if (result.type === "LanguageException" || result.type === "NoTextException") {
+                message = result.exception;
+            } else if (result.type === "ArticleException") {
+                message = "Sorry! Article could not be parsed :(";
+            } else {
+                message = "Something went wrong :(\nWe're working on fixing this.";
+            }
+            document.getElementById('output').innerText = message;
+            document.getElementById('output').style.color = "grey";
+            return true;
+        }
+        return false;
+    }
+
+    function displayElements(score) {
+        if (score < 0.4) {
+            document.getElementById('output').innerText = "I think this page is reliable and unbiased"
+            document.getElementById('output').style.color = "green"
+            document.getElementById('image').src = "../img/reliable.jpg"
+        } else if (score < 0.7) {
+            document.getElementById('output').innerText = "The language in this article makes me think that there may be some misinformation or bias. "
+            document.getElementById('output').style.color = "orange"
+            document.getElementById('image').src = "../img/warning.jpg"
+        } else {
+            document.getElementById('output').innerText = "The language in this article makes me think that there is a high level of misinformation or bias."
+            document.getElementById('output').style.color = "red"
+            document.getElementById('image').src = "../img/fake.jpg"
+        }
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('load-spinner').style.display = 'none';
+        document.getElementById('image').style.display = 'block';
+        score = (Math.round(score * 100) / 100).toFixed(2);
+        document.getElementById('meter-label').innerHTML = "<b>Fake News Score: " + score + "</b>";
+        document.getElementById('meter').value = score;
+        document.getElementById('meter').style.display = 'block';
+        document.getElementById('evidence-button').style.visibility = 'visible';
+        document.getElementById('explanation').style.display = 'block';
+    }
+
+    /* Loading */
+    setInterval(changeText, 3000);
+    function changeText() {
+        document.getElementById('loading').innerText = loading_messages[Math.floor(Math.random() * loading_messages.length)];
+    }
+
+    function showEvidence() {
+        let evidences = document.getElementById('evidences');
+        evidences.style.display = (evidences.style.display) === 'block' ? 'none' : 'block';
+        let buttonText = document.getElementById('evidence-button').innerHTML;
+        document.getElementById('evidence-button').innerHTML = (buttonText === "View Evidence") ? "Hide Evidence" : "View Evidence";
+    }
+    document.getElementById('evidence-button').addEventListener("click", showEvidence);
+}
+
+/* Get sentence with most attention */
+function getMaxAttention(sentences, attention) {
+    let sentence_attention = attention.replaceAll("\n", ",").replace(/\s+/g, '').replaceAll("0.]", "0.0]");
+    sentence_attention = JSON.parse(sentence_attention).flat();
+    console.log(sentence_attention);
+    maxSent = sentences[sentence_attention.indexOf(Math.max(...sentence_attention))];
+    console.log(maxSent);
+    return maxSent;
 }
